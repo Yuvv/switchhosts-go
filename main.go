@@ -30,6 +30,7 @@ func initApp() *cli.App {
 		editCommand,
 		delCommand,
 		listCommand,
+		switchCommand,
 	}
 
 	return app

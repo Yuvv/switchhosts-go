@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"github.com/urfave/cli"
 )
 
@@ -9,8 +9,7 @@ func OnDelete(c *cli.Context) error {
 	global := c.GlobalBool(cliFlagGlobal)
 	envName := c.Args().First()
 	if envName == emptyString {
-		fmt.Println("env cannot be null")
-		return nil
+		return errors.New("env cannot be null")
 	}
 	return DelHostFileByName(envName, global)
 }

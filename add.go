@@ -1,16 +1,32 @@
 package main
 
 import (
-	"fmt"
+	"errors"
+	"os"
+	"os/exec"
 	"github.com/urfave/cli"
 )
 
 func OnAdd(c *cli.Context) error {
+	if !c.Args().Present() {
+		return errors.New("Name of profile needed")
+	}
 
-	fmt.Println(c.Args().First())
+	configName := c.Args().First()
+	global := c.GlobalBool(cliFlagGlobal)
 
-	// todo:
-	return nil
+	if IsConfigExist(configName, global) {
+		return errors.New("Config file exists")
+	}
+
+	configFullPath, err := AddConfig(configName, global)
+	if os.IsExist(err) {
+		return err
+	}
+	
+	editor := exec.Command("open", "-e", configFullPath)
+	err = editor.Run()
+	return err
 }
 
 var addCommand = cli.Command{

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"os/user"
 	"path"
@@ -15,6 +16,17 @@ const _normalHostPrefix = "n."
 const emptyString = ""
 const cliFlagGlobal = "global"
 
+func exists(path string) (bool, error) {
+    _, err := os.Stat(path)
+    if err == nil {
+		return true, nil
+	}
+    if os.IsNotExist(err) {
+		return false, nil
+	}
+    return true, err
+}
+
 func AppDir() string {
 	curUser, err := user.Current()
 	if err != nil {
@@ -23,7 +35,7 @@ func AppDir() string {
 	userHomeDir := curUser.HomeDir
 	appDir := path.Join(userHomeDir, _configDir, _appDir)
 	if _, err := os.Stat(_configDir); os.IsNotExist(err) {
-		err = os.MkdirAll(appDir, os.ModeDir)
+		err = os.MkdirAll(appDir, os.ModePerm)
 		if os.IsExist(err) {
 			panic(err)
 		}
@@ -48,7 +60,7 @@ func GetHostFileName(filename string) (bool, string) {
 	return false, emptyString
 }
 
-func DelHostFileByName(name string, global bool) error {
+func GetConfigFullPath(name string, global bool) string {
 	appDir := AppDir()
 	var fullPath string
 	if global {
@@ -56,5 +68,29 @@ func DelHostFileByName(name string, global bool) error {
 	} else {
 		fullPath = path.Join(appDir, _normalHostPrefix+name)
 	}
+	return fullPath
+}
+
+func DelHostFileByName(name string, global bool) error {
+	fullPath := GetConfigFullPath(name, global)
 	return os.Remove(fullPath)
+}
+
+func IsConfigExist(name string, global bool) bool {
+	fullPath := GetConfigFullPath(name, global)
+	exists, _ := exists(fullPath)
+	return exists
+}
+
+func AddConfig(name string, global bool) (string, error) {
+	fullPath := GetConfigFullPath(name, global)
+
+	file, err := os.Create(fullPath)
+	if os.IsExist(err) {
+		return emptyString, errors.New("Create failed")
+	}
+	file.WriteString("# SwitchHosts-Go " + name)
+	file.Close()
+
+	return fullPath, nil
 }
