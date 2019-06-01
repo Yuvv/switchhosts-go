@@ -20,7 +20,7 @@ func OnList(c *cli.Context) error {
 		if f.IsDir() {
 			continue
 		}
-		isGlobal, hostFileName := GetHostFileName(f.Name())
+		isGlobal, hostFileName := GetConfigFilename(f.Name())
 		if isGlobal {
 			globalFileNames = append(globalFileNames, hostFileName)
 		} else if hostFileName != emptyString {

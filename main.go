@@ -31,6 +31,7 @@ func initApp() *cli.App {
 		delCommand,
 		listCommand,
 		switchCommand,
+		viewCommand,
 	}
 
 	return app

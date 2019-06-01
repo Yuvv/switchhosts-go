@@ -7,12 +7,21 @@ import (
 
 func OnSwitch(c *cli.Context) error {
 	global := c.GlobalBool(cliFlagGlobal)
-	envName := c.Args().First()
-	if envName == emptyString {
+	if !c.Args().Present() {
 		return errors.New("env cannot be null")
 	}
-	// todo
-	return nil
+
+	configMap := map[string]bool{}
+	for _, ele := range c.Args() {
+		configMap[ele] = true
+	}
+	configArray := make([]string, len(configMap))
+	i := 0
+	for key := range configMap {
+		configArray[i] = key
+		i++
+	}
+	return SwitchConfig(global, configArray...)
 }
 
 var switchCommand = cli.Command{
