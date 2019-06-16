@@ -7,7 +7,6 @@ func OpenFileWithDefaultEditor(filename string) error {
 	return cmd.Run()
 }
 
-
 func GetHostFilename() string {
 	return "/etc/hosts"
 }

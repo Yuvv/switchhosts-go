@@ -9,7 +9,6 @@ func OpenFileWithDefaultEditor(filename string) error {
 	return cmd.Run()
 }
 
-
 func GetHostFilename() string {
 	return "C:/WINDOWS/System32/drivers/etc/hosts"
 }

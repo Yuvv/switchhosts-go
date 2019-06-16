@@ -19,14 +19,14 @@ const emptyString = ""
 const cliFlagGlobal = "global"
 
 func PathExist(path string) bool {
-    _, err := os.Stat(path)
-    if err == nil {
+	_, err := os.Stat(path)
+	if err == nil {
 		return true
 	}
-    if os.IsNotExist(err) {
+	if os.IsNotExist(err) {
 		return false
 	}
-    return true
+	return true
 }
 
 func AppDir() string {
@@ -103,13 +103,13 @@ func SwitchConfig(global bool, configs ...string) error {
 		configPaths[i] = GetConfigFullPath(ele, global)
 	}
 
-	hostsFile, err := os.OpenFile(GetHostFilename(), os.O_RDWR | os.O_CREATE, os.ModePerm)
+	hostsFile, err := os.OpenFile(GetHostFilename(), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
 	if os.IsExist(err) {
 		return errors.New("open hosts file failed\n" + err.Error())
 	}
 	defer hostsFile.Close()
 
-	hostsFile.WriteString("# SwitchHosts-go\n\n")
+	hostsFile.WriteString("# ********* SwitchHosts-g *********\r\n\r\n")
 	for _, filename := range configPaths {
 		if !PathExist(filename) {
 			fmt.Printf("Config file %s not exist, ignored\n", path.Ext(filename))
