@@ -1,9 +1,6 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"io"
 	"os"
 	"os/user"
 	"path"
@@ -29,6 +26,7 @@ func PathExist(path string) bool {
 	return true
 }
 
+// get SwitchHosts-Go's home directory
 func AppDir() string {
 	curUser, err := user.Current()
 	if err != nil {
@@ -82,49 +80,4 @@ func IsConfigExist(name string, global bool) bool {
 	fullPath := GetConfigFullPath(name, global)
 	exists := PathExist(fullPath)
 	return exists
-}
-
-func AddConfig(name string, global bool) (string, error) {
-	fullPath := GetConfigFullPath(name, global)
-
-	file, err := os.Create(fullPath)
-	if os.IsExist(err) {
-		return emptyString, errors.New("create failed")
-	}
-	file.WriteString("# SwitchHosts-Go =======> " + name)
-	file.Close()
-
-	return fullPath, nil
-}
-
-func SwitchConfig(global bool, configs ...string) error {
-	configPaths := make([]string, len(configs))
-	for i, ele := range configs {
-		configPaths[i] = GetConfigFullPath(ele, global)
-	}
-
-	hostsFile, err := os.OpenFile(GetHostFilename(), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
-	if os.IsExist(err) {
-		return errors.New("open hosts file failed\n" + err.Error())
-	}
-	defer hostsFile.Close()
-
-	hostsFile.WriteString("# ********* SwitchHosts-g *********\r\n\r\n")
-	for _, filename := range configPaths {
-		if !PathExist(filename) {
-			fmt.Printf("Config file %s not exist, ignored\n", path.Ext(filename))
-			continue
-		}
-
-		file, err := os.Open(filename)
-		if os.IsExist(err) {
-			return errors.New("write " + path.Ext(filename) + " failed")
-		}
-
-		io.Copy(hostsFile, file)
-		hostsFile.WriteString("\n\n")
-		file.Close()
-	}
-
-	return nil
 }
