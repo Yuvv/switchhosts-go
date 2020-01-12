@@ -28,6 +28,9 @@ jobs:
 
     - name: Get dependencies
       run: |
+        if [ ! -d "$GOPATH/src" ]; then
+            mkdir "$GOPATH/src"
+        fi
         mv src/github.com "$GOPATH/src/"
         cd "$GOPATH/src/github.com/${{ github.repository }}"
         go get -v -t -d ./...
@@ -64,6 +67,9 @@ jobs:
 
     - name: Get dependencies
       run: |
+        if [ ! -d "$GOPATH/src" ]; then
+            mkdir "$GOPATH/src"
+        fi
         mv src/github.com "$GOPATH/src/"
         cd "$GOPATH/src/github.com/${{ github.repository }}"
         go get -v -t -d ./...
