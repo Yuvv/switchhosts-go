@@ -18,16 +18,17 @@ jobs:
       run: |
         echo "::set-env name=GOPATH::$GITHUB_WORKSPACE"
         echo "::add-path::$GITHUB_WORKSPACE/bin"
+        export GOPATH=$GITHUB_WORKSPACE
         echo $GOPATH
         echo $GITHUB_WORKSPACE
         if [ ! -d "$GITHUB_WORKSPACE/bin" ]; then
-            mkdir -p "$GOPATH/bin"
+            mkdir -p "$GITHUB_WORKSPACE/bin"
         fi
         if [ ! -d "$GITHUB_WORKSPACE/src" ]; then
-            mkdir -p "$GOPATH/src"
+            mkdir -p "$GITHUB_WORKSPACE/src"
         fi
         if [ ! -d "$GITHUB_WORKSPACE/pkg" ]; then
-            mkdir -p "$GOPATH/pkg"
+            mkdir -p "$GITHUB_WORKSPACE/pkg"
         fi
       shell: bash
 
@@ -65,16 +66,17 @@ jobs:
       run: |
         echo "::set-env name=GOPATH::$GITHUB_WORKSPACE"
         echo "::add-path::$GITHUB_WORKSPACE/bin"
+        export GOPATH=$GITHUB_WORKSPACE
         echo $GOPATH
         echo $GITHUB_WORKSPACE
         if [ ! -d "$GITHUB_WORKSPACE/bin" ]; then
-            mkdir -p "$GOPATH/bin"
+            mkdir -p "$GITHUB_WORKSPACE/bin"
         fi
         if [ ! -d "$GITHUB_WORKSPACE/src" ]; then
-            mkdir -p "$GOPATH/src"
+            mkdir -p "$GITHUB_WORKSPACE/src"
         fi
         if [ ! -d "$GITHUB_WORKSPACE/pkg" ]; then
-            mkdir -p "$GOPATH/pkg"
+            mkdir -p "$GITHUB_WORKSPACE/pkg"
         fi
       shell: bash
 
