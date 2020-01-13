@@ -16,8 +16,8 @@ jobs:
 
     - name: setup env
       run: |
-        echo "::set-env name=GOPATH::$(go env GOPATH)"
-        echo "::add-path::$(go env GOPATH)/bin"
+        echo "::set-env name=GOPATH::$GITHUB_WORKSPACE"
+        echo "::add-path::$GOPATH/bin"
         if [ ! -d "$GOPATH/bin" ]; then
             mkdir -p "$GOPATH/bin"
         fi
@@ -37,8 +37,7 @@ jobs:
 
     - name: Get dependencies
       run: |
-        mv src/github.com "$GOPATH/src/"
-        cd "$GOPATH/src/github.com/${{ github.repository }}"
+        cd "src/github.com/${{ github.repository }}"
         pwd
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
@@ -62,8 +61,8 @@ jobs:
 
     - name: setup env
       run: |
-        echo "::set-env name=GOPATH::$(go env GOPATH)"
-        echo "::add-path::$(go env GOPATH)/bin"
+        echo "::set-env name=GOPATH::$GITHUB_WORKSPACE"
+        echo "::add-path::$GOPATH/bin"
         if [ ! -d "$GOPATH/bin" ]; then
             mkdir -p "$GOPATH/bin"
         fi
@@ -83,8 +82,7 @@ jobs:
 
     - name: Get dependencies
       run: |
-        mv src/github.com "$GOPATH/src/"
-        cd "$GOPATH/src/github.com/${{ github.repository }}"
+        cd "src/github.com/${{ github.repository }}"
         pwd
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
