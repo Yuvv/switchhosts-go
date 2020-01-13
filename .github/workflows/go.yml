@@ -49,7 +49,10 @@ jobs:
         fi
 
     - name: Test
-      run: go test ./...
+      run: |
+        cd "src/github.com/${{ github.repository }}"
+        pwd
+        go test ./...
 
   build:
     name: Build
@@ -97,4 +100,7 @@ jobs:
         fi
 
     - name: Build
-      run: go build -v .
+      run: |
+        cd "src/github.com/${{ github.repository }}"
+        pwd
+        go build -v .
