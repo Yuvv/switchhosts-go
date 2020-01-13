@@ -1,6 +1,9 @@
 package main
 
-import "os/exec"
+import (
+    "os/exec"
+    "io"
+)
 
 func OpenFileWithDefaultEditor(filename string) error {
 	cmd := exec.Command("open", "-e", filename)

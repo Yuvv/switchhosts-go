@@ -18,6 +18,15 @@ jobs:
       run: |
         echo "::set-env name=GOPATH::$(go env GOPATH)"
         echo "::add-path::$(go env GOPATH)/bin"
+        if [ ! -d "$GOPATH/bin" ]; then
+            mkdir -p "$GOPATH/bin"
+        fi
+        if [ ! -d "$GOPATH/src" ]; then
+            mkdir -p "$GOPATH/src"
+        fi
+        if [ ! -d "$GOPATH/pkg" ]; then
+            mkdir -p "$GOPATH/pkg"
+        fi
       shell: bash
 
     - name: Checkout code
@@ -28,11 +37,9 @@ jobs:
 
     - name: Get dependencies
       run: |
-        if [ ! -d "$GOPATH/src" ]; then
-            mkdir -p "$GOPATH/src"
-        fi
         mv src/github.com "$GOPATH/src/"
         cd "$GOPATH/src/github.com/${{ github.repository }}"
+        pwd
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
@@ -57,6 +64,15 @@ jobs:
       run: |
         echo "::set-env name=GOPATH::$(go env GOPATH)"
         echo "::add-path::$(go env GOPATH)/bin"
+        if [ ! -d "$GOPATH/bin" ]; then
+            mkdir -p "$GOPATH/bin"
+        fi
+        if [ ! -d "$GOPATH/src" ]; then
+            mkdir -p "$GOPATH/src"
+        fi
+        if [ ! -d "$GOPATH/pkg" ]; then
+            mkdir -p "$GOPATH/pkg"
+        fi
       shell: bash
 
     - name: Check out code into the Go module directory
@@ -67,11 +83,9 @@ jobs:
 
     - name: Get dependencies
       run: |
-        if [ ! -d "$GOPATH/src" ]; then
-            mkdir -p "$GOPATH/src"
-        fi
         mv src/github.com "$GOPATH/src/"
         cd "$GOPATH/src/github.com/${{ github.repository }}"
+        pwd
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
