@@ -1,6 +1,9 @@
 package main
 
-import "os/exec"
+import (
+	"io"
+	"os/exec"
+)
 
 func OpenFileWithDefaultEditor(filename string) error {
 	cmd := exec.Command("open", "-e", filename)
@@ -12,6 +15,6 @@ func GetHostFilename() string {
 }
 
 func FprintNewLine(w io.Writer) (n int, err error) {
-	newLine := []byte {10}
+	newLine := []byte{10}
 	return w.Write(newLine)
 }
