@@ -1,11 +1,25 @@
 name: Build and Test
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '.github/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '.github/**'
+env:
+  ACTIVE_PROFILE: prod
 jobs:
-  test:
-    name: test
+  test-build:
+    name: Test and Build
     strategy:
       matrix:
-        go-version: [1.12.x, 1.13.x]
+        go-version: [1.13.x, 1.14.x]
         platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -14,59 +28,29 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
 
-    - name: setup env
+    - name: Setup env
       run: |
+        echo "----> Active Profile = $ACTIVE_PROFILE"
         echo "::set-env name=GOPATH::$(go env GOPATH)"
         echo "::add-path::$(go env GOPATH)/bin"
       shell: bash
 
     - name: Checkout code
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 1
-        path: src/github.com/${{ github.repository }}
+      # with:
+      #   fetch-depth: 1
+      #   path: ./src/github.com/${{ github.repository }}
 
     - name: Get dependencies
       run: |
         go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+        # if [ -f Gopkg.toml ]; then
+        #     curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+        #     dep ensure
+        # fi
 
     - name: Test
-      run: go test ./...
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13
-      id: go
-
-    - name: setup env
-      run: |
-        echo "::set-env name=GOPATH::$(go env GOPATH)"
-        echo "::add-path::$(go env GOPATH)/bin"
-      shell: bash
-
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 1
-        path: src/github.com/${{ github.repository }}
-
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+      run: go test -v ./...
 
     - name: Build
       run: go build -v .
