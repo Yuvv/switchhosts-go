@@ -1,5 +1,17 @@
 name: Build and Test
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '.github/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '.github/**'
 env:
   ACTIVE_PROFILE: prod
 jobs:
