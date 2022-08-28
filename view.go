@@ -1,9 +1,15 @@
 package main
 
-import "github.com/urfave/cli"
+import (
+	"log"
+
+	"github.com/urfave/cli"
+)
 
 func OnView(c *cli.Context) {
-	OpenFileWithDefaultEditor(GetHostFilename())
+	if err := OpenFileWithDefaultEditor(GetHostFilename()); err != nil {
+		log.Fatalf("cannot open file, error:%+v", err)
+	}
 }
 
 var viewCommand = cli.Command{

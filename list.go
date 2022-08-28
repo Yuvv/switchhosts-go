@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/urfave/cli"
 	"io/ioutil"
-	"log"
+
+	"github.com/urfave/cli"
 )
 
 func OnList(c *cli.Context) error {
@@ -29,21 +29,19 @@ func OnList(c *cli.Context) error {
 		}
 	}
 
-	if c.GlobalBool(cliFlagGlobal) {
-		log.Println("global flag is ignored when switch configs")
-		fmt.Println()
-	}
 	fmt.Println("Global Config:")
 	for _, ele := range globalFileNames {
 		fmt.Print(ele, "\t")
 	}
 	fmt.Println()
 
-	fmt.Println("Normal Config:")
-	for _, ele := range fileNames {
-		fmt.Print(ele, "\t")
+	if !c.GlobalBool(cliFlagGlobal) {
+		fmt.Println("Normal Config:")
+		for _, ele := range fileNames {
+			fmt.Print(ele, "\t")
+		}
+		fmt.Println()
 	}
-	fmt.Println()
 	return nil
 }
 
